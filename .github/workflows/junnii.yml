@@ -3,7 +3,7 @@ name: Create Pull Request
 on:
   push:
     branches:
-      - fixes_general_1
+      - malik
 
 jobs:
   create_pull_request:
@@ -17,8 +17,8 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: fixes_general_1
-          base: master  # Add this line to specify the base branch
+          branch: malik
+          base: main # Add this line to specify the base branch
           title: 'Merge fixes_general_1 into master'
           body: 'This pull request was automatically created.'
 
