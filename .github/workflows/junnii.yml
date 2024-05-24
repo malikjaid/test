@@ -1,39 +1,24 @@
-name: demo
+name: Create Pull Request
 
 on:
   push:
     branches:
-      - main
+      - fixes_general_1
 
 jobs:
-  updateAuthorInfo:
+  create_pull_request:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Extract git commit data
-        id: git-commit-data
-        uses: rlespinasse/git-commit-data-action@v1.x
-
-      - name: Debug git commit data outputs
-        uses: actions/github-script@v6
-        with:
-          script: |
-            console.log('GIT_COMMIT_AUTHOR_NAME:', '${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}');
-
-      - name: Update author information
-        run: echo "${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}" > AUTHOR
-
-      - name: Raise PR
+      - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: "auto-pr-BRANCH"
-          base: main
-          title: "Demo for auto PR"
-          committer: "${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}"
-          author: "${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}"
-          body: "This is to show automatic PR creation"
           token: ${{ secrets.GITHUB_TOKEN }}
-          delete-branch: true
+          branch: fixes_general_1
+          base: master  # Add this line to specify the base branch
+          title: 'Merge fixes_general_1 into master'
+          body: 'This pull request was automatically created.'
+
