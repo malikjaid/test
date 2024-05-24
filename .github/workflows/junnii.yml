@@ -3,7 +3,7 @@ name: demo
 on:
   push:
     branches:
-      - malikt
+      - main
 
 jobs:
   updateAuthorInfo:
@@ -19,7 +19,7 @@ jobs:
       - name: Raise PR
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: malikt
+          branch: "autopr"
           base: main
           title: "Demo for auto PR"
           committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
