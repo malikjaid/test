@@ -1,24 +1,17 @@
-name: Create Pull Request
+# File: .github/workflows/pull-request.yml
 
+# File: .github/workflows/pull-request.yml
 on:
   push:
     branches:
-      - malik
+    - malik
 
 jobs:
-  create_pull_request:
+  pull-request:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: malik
-          base: main # Add this line to specify the base branch
-          title: 'Merge fixes_general_1 into master'
-          body: 'This pull request was automatically created.'
-
+    - uses: actions/checkout@v3
+    - name: pull-request
+      uses: diillson/auto-pull-request@v1.0.1
+      with:
+        destination_branch: "main"
