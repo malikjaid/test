@@ -1,0 +1,17 @@
+name: simple-demo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  simple-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Display branch name
+        run: echo "The current branch is $GITHUB_REF"
