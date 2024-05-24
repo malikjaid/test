@@ -3,7 +3,7 @@ name: demo
 on:
   push:
     branches:
-      - malikt
+      - main
 
 jobs:
   updateAuthorInfo:
@@ -14,18 +14,26 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Extract git commit data
+        id: git-commit-data
         uses: rlespinasse/git-commit-data-action@v1.x
+
+      - name: Debug git commit data outputs
+        uses: actions/github-script@v6
+        with:
+          script: |
+            console.log('GIT_COMMIT_AUTHOR_NAME:', '${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}');
+
+      - name: Update author information
+        run: echo "${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}" > AUTHOR
 
       - name: Raise PR
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: malikt
+          branch: "auto-pr-BRANCH"
           base: main
           title: "Demo for auto PR"
-          committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
-          author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
-          body: |
-            This is to show automatic PR creation
+          committer: "${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}"
+          author: "${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}"
+          body: "This is to show automatic PR creation"
           token: ${{ secrets.GITHUB_TOKEN }}
-          delete-branch: false
-
+          delete-branch: true
