@@ -1,0 +1,31 @@
+name: demo
+
+on:
+  push:
+    branches:
+      - malikt
+
+jobs:
+  updateAuthorInfo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Extract git commit data
+        uses: rlespinasse/git-commit-data-action@v1.x
+
+      - name: Raise PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: malikt
+          base: main
+          title: "Demo for auto PR"
+          committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+          author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+          body: |
+            This is to show automatic PR creation
+          token: ${{ secrets.GITHUB_TOKEN }}
+          delete-branch: false
+
