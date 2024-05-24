@@ -17,6 +17,13 @@ jobs:
         id: git-commit-data
         uses: rlespinasse/git-commit-data-action@v1.x
 
+      - name: Debug git commit data outputs
+        uses: actions/github-script@v6
+        with:
+          script: |
+            console.log('GIT_COMMIT_AUTHOR_NAME:', '${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}');
+            console.log('GIT_COMMIT_AUTHOR_EMAIL:', '${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_EMAIL }}');
+
       - name: Update author information
         run: echo "${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}" > AUTHOR
 
@@ -31,5 +38,3 @@ jobs:
           body: "This is to show automatic PR creation"
           token: ${{ secrets.GITHUB_TOKEN }}
           delete-branch: true
-
-
