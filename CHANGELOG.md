@@ -1,3 +1,22 @@
+## [5.0.5](https://github.com/malikjaid/test/compare/v5.0.4...v5.0.5) (2024-06-12)
+
+
+### Bug Fixes
+
+* SCRUM-457 ([408f606](https://github.com/malikjaid/test/commit/408f606aee7acb026a813d19efcf505a2464d727))
+* wqert ([6cfe399](https://github.com/malikjaid/test/commit/6cfe399f9389d9fef3cff15c28002717d0db0f7c))
+
+
+
+## [4.0.1](https://github.com/malikjaid/test/compare/v2.0.1...v4.0.1) (2024-06-12)
+
+
+### Bug Fixes
+
+* wertd ([0fb423a](https://github.com/malikjaid/test/commit/0fb423a2ee94e6e69aa779ce90b0e2411b2ff165))
+
+
+
 ## [5.0.4](https://github.com/malikjaid/test/compare/v5.0.3...v5.0.4) (2024-06-12)
 
 
@@ -22,15 +41,6 @@
 ### Bug Fixes
 
 * rgt ([fccb410](https://github.com/malikjaid/test/commit/fccb410d950cc1ba3cd05fe1b0c0247a29daaeb1))
-
-
-
-## [5.0.1](https://github.com/malikjaid/test/compare/v2.0.5...v5.0.1) (2024-06-12)
-
-
-### Bug Fixes
-
-* sdfg ([71f51be](https://github.com/malikjaid/test/commit/71f51be466bdf07e00037a6715e232a0f279496e))
 
 
 
