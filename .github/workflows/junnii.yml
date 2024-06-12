@@ -1,26 +1,31 @@
-name: Publish package to the Maven Central Repository
+name: Releases
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - malik
 
 jobs:
-  publish:
+  changelog:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out Git repository
+      - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Install Java and Maven
-        uses: actions/setup-java@v1
+
+      - name: Generate Changelog
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3.7.1
         with:
-          java-version: 8
-      - if: github.event.release
-        name: Update version in pom.xml (Release only)
-        run: mvn -B versions:set -DnewVersion=${{ github.event.release.tag_name }} -DgenerateBackupPoms=false
-      - name: Release Maven package
-        uses: samuelmeuli/action-maven-publish@v1.4.0
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          skip-version-file: true  # Skip version bumping as it's not needed
+          skip-on-empty: true  # Skip step if changelog is empty
+          
+      - name: Create Release
+        uses: actions/create-release@v1
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          maven_profiles: deploy, verify
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          nexus_username: ${{ secrets.OSSRH_USERNAME }}
-          nexus_password: ${{ secrets.OSSRH_TOKEN }}
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
