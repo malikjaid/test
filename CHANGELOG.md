@@ -1,3 +1,12 @@
+## [2.0.5](https://github.com/malikjaid/test/compare/v2.0.4...v2.0.5) (2024-06-12)
+
+
+### Bug Fixes
+
+* sdfg ([71f51be](https://github.com/malikjaid/test/commit/71f51be466bdf07e00037a6715e232a0f279496e))
+
+
+
 ## [2.0.4](https://github.com/malikjaid/test/compare/v2.0.3...v2.0.4) (2024-06-12)
 
 
@@ -26,15 +35,6 @@
 
 
 ## [2.0.1](https://github.com/malikjaid/test/compare/v0.1.3...v2.0.1) (2024-06-12)
-
-
-
-## [0.1.3](https://github.com/malikjaid/test/compare/v0.1.2...v0.1.3) (2024-06-12)
-
-
-### Bug Fixes
-
-* esfrd ([c9e51c6](https://github.com/malikjaid/test/commit/c9e51c60774ec71953325d59956b919780dc27c8))
 
 
 
