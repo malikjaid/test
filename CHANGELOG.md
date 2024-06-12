@@ -1,3 +1,12 @@
+## [5.0.4](https://github.com/malikjaid/test/compare/v5.0.3...v5.0.4) (2024-06-12)
+
+
+### Bug Fixes
+
+* er ([360d9c7](https://github.com/malikjaid/test/commit/360d9c71bd06877dbb45ba5f13f386082567adf8))
+
+
+
 ## [5.0.3](https://github.com/malikjaid/test/compare/v5.0.2...v5.0.3) (2024-06-12)
 
 
@@ -22,15 +31,6 @@
 ### Bug Fixes
 
 * sdfg ([71f51be](https://github.com/malikjaid/test/commit/71f51be466bdf07e00037a6715e232a0f279496e))
-
-
-
-## [2.0.4](https://github.com/malikjaid/test/compare/v2.0.3...v2.0.4) (2024-06-12)
-
-
-### Bug Fixes
-
-* efrt ([27d131f](https://github.com/malikjaid/test/commit/27d131feadd720a0369b6cb00fd6475f87f2e0f7))
 
 
 
