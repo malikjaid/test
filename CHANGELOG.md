@@ -1,4 +1,13 @@
-## [2.0.5](https://github.com/malikjaid/test/compare/v2.0.4...v2.0.5) (2024-06-12)
+## [5.0.2](https://github.com/malikjaid/test/compare/v5.0.1...v5.0.2) (2024-06-12)
+
+
+### Bug Fixes
+
+* rgt ([fccb410](https://github.com/malikjaid/test/commit/fccb410d950cc1ba3cd05fe1b0c0247a29daaeb1))
+
+
+
+## [5.0.1](https://github.com/malikjaid/test/compare/v2.0.5...v5.0.1) (2024-06-12)
 
 
 ### Bug Fixes
@@ -22,19 +31,6 @@
 ### Bug Fixes
 
 * fix:  ([743fbee](https://github.com/malikjaid/test/commit/743fbee1ab39dab16fd8893562b693c9318dbdb5))
-
-
-
-## [2.0.2](https://github.com/malikjaid/test/compare/v2.0.1...v2.0.2) (2024-06-12)
-
-
-### Bug Fixes
-
-* erdtf ([510601c](https://github.com/malikjaid/test/commit/510601ca0ab587e61a994b288c04076039d1b584))
-
-
-
-## [2.0.1](https://github.com/malikjaid/test/compare/v0.1.3...v2.0.1) (2024-06-12)
 
 
 
