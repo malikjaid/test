@@ -17,7 +17,9 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v3.7.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
+          skip-version-file: true  # Skip version bumping as it's not needed
+          skip-on-empty: true  # Skip step if changelog is empty
+          
       - name: Create Release
         uses: actions/create-release@v1
         if: ${{ steps.changelog.outputs.skipped == 'false' }}
