@@ -1,3 +1,12 @@
+## [0.1.3](https://github.com/malikjaid/test/compare/v0.1.2...v0.1.3) (2024-06-12)
+
+
+### Bug Fixes
+
+* esfrd ([c9e51c6](https://github.com/malikjaid/test/commit/c9e51c60774ec71953325d59956b919780dc27c8))
+
+
+
 ## [0.1.2](https://github.com/malikjaid/test/compare/v0.1.1...v0.1.2) (2024-06-12)
 
 
