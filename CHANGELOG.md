@@ -1,3 +1,12 @@
+## [5.0.6](https://github.com/malikjaid/test/compare/v5.0.5...v5.0.6) (2024-06-13)
+
+
+### Bug Fixes
+
+* ferf ([7c95781](https://github.com/malikjaid/test/commit/7c95781a655fb54624f43ef9d8d08a1e7a2864cc))
+
+
+
 ## [5.0.5](https://github.com/malikjaid/test/compare/v5.0.4...v5.0.5) (2024-06-12)
 
 
