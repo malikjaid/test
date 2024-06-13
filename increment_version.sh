@@ -7,7 +7,7 @@ git fetch --tags
 VERSION_FILE="version.php"
 if [ -f "$VERSION_FILE" ]; then
     echo "$VERSION_FILE found."
-    CURRENT_VERSION=$(grep -oP "\$version = '\d+\.\d+\.\d+'" "$VERSION_FILE" | grep -oP "\d+\.\d+\.\d+")
+    CURRENT_VERSION=$(grep -oP "\$version\s*=\s*'\d+\.\d+\.\d+'" "$VERSION_FILE" | grep -oP "\d+\.\d+\.\d+")
     if [ -z "$CURRENT_VERSION" ]; then
         echo "Error: Failed to extract version from $VERSION_FILE. Make sure the version is in the format 'x.y.z'."
         echo "Contents of $VERSION_FILE:"
@@ -35,7 +35,7 @@ PATCH=$((PATCH + 1))
 NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 
 # Update the PHP file with the new version
-sed -i "s/\(\$version = '\)[0-9]\+\.[0-9]\+\.[0-9]\+\(';.*\)/\1$NEW_VERSION\2/" "$VERSION_FILE"
+sed -i "s/\(\$version\s*=\s*'\)[0-9]\+\.[0-9]\+\.[0-9]\+\(';.*\)/\1$NEW_VERSION\2/" "$VERSION_FILE"
 
 # Commit the updated PHP file
 git config user.email "conventional.changelog.action@github.com"
@@ -52,8 +52,5 @@ git push origin "$NEW_TAG"
 git push origin
 
 # Create a new release
-RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
-gh release create "$NEW_TAG" --notes "$RELEASE_BODY"
-
 RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
 gh release create "$NEW_TAG" --notes "$RELEASE_BODY"
