@@ -1,3 +1,12 @@
+## [6.0.3](https://github.com/malikjaid/test/compare/v6.0.2...v6.0.3) (2024-06-13)
+
+
+### Bug Fixes
+
+* arefg ([18109bd](https://github.com/malikjaid/test/commit/18109bd18b28207efb9f7ea472e9f37c31d459b3))
+
+
+
 ## [6.0.2](https://github.com/malikjaid/test/compare/v6.0.1...v6.0.2) (2024-06-13)
 
 
@@ -44,15 +53,6 @@
 ### Bug Fixes
 
 * SCRUM-457 ([6117b6e](https://github.com/malikjaid/test/commit/6117b6ecd11b3bd15d48b8367062fe355f9994cd))
-
-
-
-## [5.0.2](https://github.com/malikjaid/test/compare/v5.0.1...v5.0.2) (2024-06-12)
-
-
-### Bug Fixes
-
-* rgt ([fccb410](https://github.com/malikjaid/test/commit/fccb410d950cc1ba3cd05fe1b0c0247a29daaeb1))
 
 
 
