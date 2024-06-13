@@ -8,10 +8,13 @@ VERSION_FILE="version.php"
 if [ -f "$VERSION_FILE" ]; then
     echo "$VERSION_FILE found."
     CURRENT_VERSION=$(grep -oP "\$version = '\K[0-9]+\.[0-9]+\.[0-9]+" "$VERSION_FILE")
-    echo "Extracted version: $CURRENT_VERSION"
     if [ -z "$CURRENT_VERSION" ]; then
         echo "Error: Failed to extract version from $VERSION_FILE. Make sure the version is in the format 'x.y.z'."
+        echo "Contents of $VERSION_FILE:"
+        cat "$VERSION_FILE"
         exit 1
+    else
+        echo "Extracted version: $CURRENT_VERSION"
     fi
 else
     echo "Error: $VERSION_FILE file not found!"
