@@ -1,39 +1,32 @@
-name: demo
-
+name: Releases
 on:
   push:
     branches:
-      - main
+      - malikt
+      
 
 jobs:
-  updateAuthorInfo:
+  changelog:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Extract git commit data
-        id: git-commit-data
-        uses: rlespinasse/git-commit-data-action@v1.x
-
-      - name: Debug git commit data outputs
-        uses: actions/github-script@v6
+      - name: Generate Changelog
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3.7.1
         with:
-          script: |
-            console.log('GIT_COMMIT_AUTHOR_NAME:', '${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}');
-
-      - name: Update author information
-        run: echo "${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}" > AUTHOR
-
-      - name: Raise PR
-        uses: peter-evans/create-pull-request@v3
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          skip-version-file: true  # Skip version bumping as it's not needed
+          skip-on-empty: true  # Skip step if changelog is empty
+          
+      - name: Create Release
+        uses: actions/create-release@v1
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          branch: "auto-pr-BRANCH"
-          base: main
-          title: "Demo for auto PR"
-          committer: "${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}"
-          author: "${{ steps.git-commit-data.outputs.GIT_COMMIT_AUTHOR_NAME }}"
-          body: "This is to show automatic PR creation"
-          token: ${{ secrets.GITHUB_TOKEN }}
-          delete-branch: true
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
