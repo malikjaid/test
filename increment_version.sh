@@ -54,13 +54,13 @@ git config user.name "Conventional Changelog Action"
 git add "$VERSION_FILE"
 git commit -m "chore(release): $NEW_VERSION"
 
+# Push the changes to the repository
+git push origin
+
 # Create the new tag
 NEW_TAG="$NEW_VERSION"
 git tag -a "$NEW_TAG" -m "$NEW_TAG"
 git push origin "$NEW_TAG"
-
-# Push the changes to the repository
-git push origin
 
 # Create a new release
 RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
