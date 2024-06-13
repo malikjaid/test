@@ -7,6 +7,10 @@ git fetch --tags
 VERSION_FILE="version.php"
 if [ -f "$VERSION_FILE" ]; then
     echo "$VERSION_FILE found."
+    echo "Contents of $VERSION_FILE:"
+    cat "$VERSION_FILE"
+
+    # Extract the version string
     CURRENT_VERSION=$(grep -oP "\$version\s*=\s*'\d+\.\d+\.\d+'" "$VERSION_FILE" | grep -oP "\d+\.\d+\.\d+")
     if [ -z "$CURRENT_VERSION" ]; then
         echo "Error: Failed to extract version from $VERSION_FILE. Make sure the version is in the format 'x.y.z'."
@@ -28,14 +32,21 @@ MAJOR=${VERSION_PARTS[0]}
 MINOR=${VERSION_PARTS[1]}
 PATCH=${VERSION_PARTS[2]}
 
+echo "Current Version Parts: MAJOR=$MAJOR, MINOR=$MINOR, PATCH=$PATCH"
+
 # Increment the patch version
 PATCH=$((PATCH + 1))
 
 # Form the new version string
 NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 
+echo "New Version: $NEW_VERSION"
+
 # Update the PHP file with the new version
 sed -i "s/\(\$version\s*=\s*'\)[0-9]\+\.[0-9]\+\.[0-9]\+\(';.*\)/\1$NEW_VERSION\2/" "$VERSION_FILE"
+
+echo "Updated $VERSION_FILE contents:"
+cat "$VERSION_FILE"
 
 # Commit the updated PHP file
 git config user.email "conventional.changelog.action@github.com"
