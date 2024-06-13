@@ -1,4 +1,13 @@
-## [6.0.3](https://github.com/malikjaid/test/compare/v6.0.2...v6.0.3) (2024-06-13)
+## [9.0.1](https://github.com/malikjaid/test/compare/v9.0.0...v9.0.1) (2024-06-13)
+
+
+### Bug Fixes
+
+* erth ([1982b22](https://github.com/malikjaid/test/commit/1982b2279b0997a37c0da4ffa5255824988b1738))
+
+
+
+# [9.0.0](https://github.com/malikjaid/test/compare/v6.0.3...v9.0.0) (2024-06-13)
 
 
 ### Bug Fixes
@@ -35,24 +44,6 @@
 ### Bug Fixes
 
 * wertd ([0fb423a](https://github.com/malikjaid/test/commit/0fb423a2ee94e6e69aa779ce90b0e2411b2ff165))
-
-
-
-## [5.0.4](https://github.com/malikjaid/test/compare/v5.0.3...v5.0.4) (2024-06-12)
-
-
-### Bug Fixes
-
-* er ([360d9c7](https://github.com/malikjaid/test/commit/360d9c71bd06877dbb45ba5f13f386082567adf8))
-
-
-
-## [5.0.3](https://github.com/malikjaid/test/compare/v5.0.2...v5.0.3) (2024-06-12)
-
-
-### Bug Fixes
-
-* SCRUM-457 ([6117b6e](https://github.com/malikjaid/test/commit/6117b6ecd11b3bd15d48b8367062fe355f9994cd))
 
 
 
