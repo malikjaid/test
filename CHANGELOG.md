@@ -1,3 +1,12 @@
+## [6.0.6](https://github.com/malikjaid/test/compare/v6.0.5...v6.0.6) (2024-06-13)
+
+
+### Bug Fixes
+
+* retgthg ([761039b](https://github.com/malikjaid/test/commit/761039b3c32b2183ee22239706113de1e8273161))
+
+
+
 ## [6.0.5](https://github.com/malikjaid/test/compare/v6.0.4...v6.0.5) (2024-06-13)
 
 
