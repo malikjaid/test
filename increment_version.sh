@@ -7,6 +7,10 @@ git fetch --tags
 VERSION_FILE="version.php"
 if [ -f "$VERSION_FILE" ]; then
     CURRENT_VERSION=$(grep -oP "\$version = '\K[0-9]+\.[0-9]+\.[0-9]+" "$VERSION_FILE")
+    if [ -z "$CURRENT_VERSION" ]; then
+        echo "Failed to extract version from $VERSION_FILE"
+        exit 1
+    fi
 else
     echo "$VERSION_FILE file not found!"
     exit 1
@@ -45,3 +49,4 @@ git push origin
 # Create a new release
 RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
 gh release create "$NEW_TAG" --notes "$RELEASE_BODY"
+
