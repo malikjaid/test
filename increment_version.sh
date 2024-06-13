@@ -49,3 +49,6 @@ git push origin
 # Create a new release
 RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
 gh release create "$NEW_TAG" --notes "$RELEASE_BODY"
+
+RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
+gh release create "$NEW_TAG" --notes "$RELEASE_BODY"
