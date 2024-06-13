@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-      - malikt
+      - develop
+      - 'feature/*'
   workflow_dispatch:
 
 jobs:
