@@ -1,3 +1,12 @@
+## [5.0.7](https://github.com/malikjaid/test/compare/v5.0.6...v5.0.7) (2024-06-13)
+
+
+### Bug Fixes
+
+* df ([5b2cd43](https://github.com/malikjaid/test/commit/5b2cd43ae7bf8eae111a5b7c8b266a5b9eddc860))
+
+
+
 ## [5.0.6](https://github.com/malikjaid/test/compare/v5.0.5...v5.0.6) (2024-06-13)
 
 
@@ -41,15 +50,6 @@
 ### Bug Fixes
 
 * SCRUM-457 ([6117b6e](https://github.com/malikjaid/test/commit/6117b6ecd11b3bd15d48b8367062fe355f9994cd))
-
-
-
-## [5.0.2](https://github.com/malikjaid/test/compare/v5.0.1...v5.0.2) (2024-06-12)
-
-
-### Bug Fixes
-
-* rgt ([fccb410](https://github.com/malikjaid/test/commit/fccb410d950cc1ba3cd05fe1b0c0247a29daaeb1))
 
 
 
