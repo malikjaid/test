@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - malik
+      - main
 
 jobs:
   changelog:
