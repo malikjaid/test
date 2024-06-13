@@ -16,18 +16,50 @@ jobs:
         with:
           fetch-depth: 0  # Ensure we have the full git history
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install conventional-changelog-cli -g
+
+      - name: Get the latest tag
+        id: get_latest_tag
+        run: |
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          if [ -z "$latest_tag" ]; then
+            latest_tag="v0.0.0"
+          fi
+          echo "Latest tag: $latest_tag"
+          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+
+      - name: Determine next version
+        id: next_version
+        run: |
+          latest_version=${{ env.latest_tag }}
+          latest_version=${latest_version#v}
+          IFS='.' read -r -a version_parts <<< "$latest_version"
+          major=${version_parts[0]}
+          minor=${version_parts[1]}
+          patch=${version_parts[2]}
+          next_patch=$((patch + 1))
+          next_version="v$major.$minor.$next_patch"
+          echo "Next version: $next_version"
+          echo "next_version=$next_version" >> $GITHUB_ENV
+
       - name: Generate Changelog
         id: changelog
         uses: TriPSs/conventional-changelog-action@v3.7.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          skip-version-file: true  # Skip version bumping as it's not needed
+          version: ${{ env.next_version }}
           skip-on-empty: true  # Skip step if changelog is empty
 
       - name: Check for existing tag
         id: check_tag
         run: |
-          if git rev-parse "refs/tags/${{ steps.changelog.outputs.tag }}" >/dev/null 2>&1; then
+          if git rev-parse "refs/tags/${{ env.next_version }}" >/dev/null 2>&1; then
             echo "TAG_EXISTS=true" >> $GITHUB_ENV
           else
             echo "TAG_EXISTS=false" >> $GITHUB_ENV
@@ -35,7 +67,7 @@ jobs:
       - name: Set Maven Version
         if: env.TAG_EXISTS == 'false'
         run: |
-          mvn -B versions:set -DnewVersion=${{ steps.changelog.outputs.tag }} -DgenerateBackupPoms=false
+          mvn -B versions:set -DnewVersion=${{ env.next_version#v }} -DgenerateBackupPoms=false
         working-directory: ./path/to/your/project  # Adjust this path to your Maven project's directory
 
       - name: Commit and push changes
@@ -44,8 +76,8 @@ jobs:
           git config user.name "Conventional Changelog Action"
           git config user.email "conventional.changelog.action@github.com"
           git add .
-          git commit -m "chore(release): ${{ steps.changelog.outputs.tag }}"
-          git tag -a ${{ steps.changelog.outputs.tag }} -m "${{ steps.changelog.outputs.tag }}"
+          git commit -m "chore(release): ${{ env.next_version }}"
+          git tag -a ${{ env.next_version }} -m "${{ env.next_version }}"
           git push origin --tags
 
       - name: Create Release
@@ -54,6 +86,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.changelog.outputs.tag }}
-          release_name: ${{ steps.changelog.outputs.tag }}
+          tag_name: ${{ env.next_version }}
+          release_name: ${{ env.next_version }}
           body: ${{ steps.changelog.outputs.clean_changelog }}
