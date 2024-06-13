@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - malikt
+      - malik
       
 
 jobs:
