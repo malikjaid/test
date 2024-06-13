@@ -1,32 +1,37 @@
-name: Releases
+name: Release
+
 on:
   push:
     branches:
-      - malik
+      - main
       - malikt
+  workflow_dispatch:
 
 jobs:
-  changelog:
+  versioning:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Generate Changelog
-        id: changelog
-        uses: TriPSs/conventional-changelog-action@v3.7.1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          skip-version-file: true  # Skip version bumping as it's not needed
-          skip-on-empty: true  # Skip step if changelog is empty
-          
-      - name: Create Release
-        uses: actions/create-release@v1
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.changelog.outputs.tag }}
-          release_name: ${{ steps.changelog.outputs.tag }}
-          body: ${{ steps.changelog.outputs.clean_changelog }}
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install conventional-changelog
+      run: npm install -g conventional-changelog-cli
+
+    - name: Set up Git
+      run: |
+        git fetch --tags
+        git config user.email "conventional.changelog.action@github.com"
+        git config user.name "Conventional Changelog Action"
+
+    - name: Increment version and create release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        chmod +x increment_version.sh
+        ./increment_version.sh
