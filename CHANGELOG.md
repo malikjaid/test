@@ -1,4 +1,13 @@
-## [6.0.6](https://github.com/malikjaid/test/compare/v6.0.5...v6.0.6) (2024-06-13)
+## [7.0.1](https://github.com/malikjaid/test/compare/v7.0.0...v7.0.1) (2024-06-13)
+
+
+### Bug Fixes
+
+* rfstg ([d8d95b4](https://github.com/malikjaid/test/commit/d8d95b467bd9fe40e049010c356ad2efd48c3798))
+
+
+
+# [7.0.0](https://github.com/malikjaid/test/compare/v6.0.6...v7.0.0) (2024-06-13)
 
 
 ### Bug Fixes
