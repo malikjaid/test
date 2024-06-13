@@ -1,10 +1,10 @@
 name: Releases
+
 on:
   push:
     branches:
       - malikt
       - malik
-      
 
 jobs:
   changelog:
@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Ensure we have the full git history
 
       - name: Generate Changelog
         id: changelog
@@ -21,10 +23,34 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           skip-version-file: true  # Skip version bumping as it's not needed
           skip-on-empty: true  # Skip step if changelog is empty
-          
+
+      - name: Check for existing tag
+        id: check_tag
+        run: |
+          if git rev-parse "refs/tags/${{ steps.changelog.outputs.tag }}" >/dev/null 2>&1; then
+            echo "TAG_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "TAG_EXISTS=false" >> $GITHUB_ENV
+
+      - name: Set Maven Version
+        if: env.TAG_EXISTS == 'false'
+        run: |
+          mvn -B versions:set -DnewVersion=${{ steps.changelog.outputs.tag }} -DgenerateBackupPoms=false
+        working-directory: ./path/to/your/project  # Adjust this path to your Maven project's directory
+
+      - name: Commit and push changes
+        if: env.TAG_EXISTS == 'false'
+        run: |
+          git config user.name "Conventional Changelog Action"
+          git config user.email "conventional.changelog.action@github.com"
+          git add .
+          git commit -m "chore(release): ${{ steps.changelog.outputs.tag }}"
+          git tag -a ${{ steps.changelog.outputs.tag }} -m "${{ steps.changelog.outputs.tag }}"
+          git push origin --tags
+
       - name: Create Release
+        if: env.TAG_EXISTS == 'false' && steps.changelog.outputs.skipped == 'false'
         uses: actions/create-release@v1
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
