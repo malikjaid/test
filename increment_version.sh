@@ -22,9 +22,28 @@ NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 # Create the new tag
 NEW_TAG="v$NEW_VERSION"
 
-# Commit and tag the new version
-git config user.email "conventional.changelog.action@github.com"
-git config user.name "Conventional Changelog Action"
+# Update version.php with the new version
+VERSION_FILE="version.php"
+
+# Check if version.php exists
+if [ -f "$VERSION_FILE" ]; then
+    echo "$VERSION_FILE found."
+    # Update the version in the PHP file
+    sed -i "s/\(\$version\s*=\s*'\)[vV]*[0-9]\+\.[0-9]\+\.[0-9]\+\(';.*\)/\1$NEW_VERSION\2/" "$VERSION_FILE"
+    echo "Updated $VERSION_FILE with version: $NEW_VERSION"
+else
+    echo "Error: $VERSION_FILE not found!"
+    exit 1
+fi
+
+# Commit the updated PHP file
+git add "$VERSION_FILE"
+git commit -m "chore: Update version to $NEW_VERSION in $VERSION_FILE"
+
+# Push the changes to the repository
+git push origin HEAD:malikt
+
+# Tag and create a new release
 git tag -a "$NEW_TAG" -m "$NEW_TAG"
 git push origin "$NEW_TAG"
 
