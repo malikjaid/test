@@ -1,3 +1,12 @@
+## [8.0.12](https://github.com/malikjaid/test/compare/v8.0.11...v8.0.12) (2024-06-13)
+
+
+### Bug Fixes
+
+* erterftghj ([5591ad9](https://github.com/malikjaid/test/commit/5591ad9d0c84d9dd6b1714b24ab6e31e5b9c7173))
+
+
+
 ## [8.0.11](https://github.com/malikjaid/test/compare/v8.0.10...v8.0.11) (2024-06-13)
 
 
@@ -22,15 +31,6 @@
 ### Bug Fixes
 
 * sdfgh ([127e4c4](https://github.com/malikjaid/test/commit/127e4c4ef59a2dedfb5f3d181ad2a3acff8badf8))
-
-
-
-## [8.0.8](https://github.com/malikjaid/test/compare/v5.0.10...v8.0.8) (2024-06-13)
-
-
-### Bug Fixes
-
-* ewf ([6f89b7a](https://github.com/malikjaid/test/commit/6f89b7a91067a81180381b73e04dc11f1e7fb4f6))
 
 
 
