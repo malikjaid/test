@@ -23,7 +23,7 @@ NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 NEW_TAG="v$NEW_VERSION"
 
 # Update version.php with the new version
-VERSION_FILE=".github/workflows/version.php"
+VERSION_FILE="version.php"
 
 
 
