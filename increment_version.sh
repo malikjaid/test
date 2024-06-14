@@ -25,7 +25,7 @@ NEW_TAG="v$NEW_VERSION"
 # Update version.php with the new version
 VERSION_FILE="test/.github/workflows/version.php"
 
-/version.php"
+
 
 # Check if version.php exists
 if [ -f "$VERSION_FILE" ]; then
