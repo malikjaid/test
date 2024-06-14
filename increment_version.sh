@@ -40,8 +40,11 @@ fi
 git add "$VERSION_FILE"
 git commit -m "chore: Update version to $NEW_VERSION in $VERSION_FILE"
 
-# Push the changes to the repository
-git push origin HEAD:malikt
+# Determine the current branch
+CURRENT_BRANCH=$(git branch --show-current)
+
+# Push the changes to the current branch
+git push origin "$CURRENT_BRANCH"
 
 # Tag and create a new release
 git tag -a "$NEW_TAG" -m "$NEW_TAG"
