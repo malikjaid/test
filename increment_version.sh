@@ -57,7 +57,7 @@ RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
 COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"%h %s" --no-merges | grep -v "chore: Update version to")
 
 # Combine the release notes and commit messages
-RELEASE_NOTES="$RELEASE_BODY\n\nCommits:\n$COMMITS"
+RELEASE_NOTES="$RELEASE_BODY\n$COMMITS"
 
 # Create a new release with the combined notes
 gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
