@@ -56,8 +56,12 @@ RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
 # Fetch the latest commit messages since the last tag, excluding version.php updates
 COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"%h %s" --no-merges | grep -v "chore: Update version to")
 
-# Combine the release notes and commit messages
-RELEASE_NOTES="$RELEASE_BODY\n$COMMITS"
+# Combine the release notes and commit messages, ensuring proper formatting
+if [[ -z "$COMMITS" ]]; then
+    RELEASE_NOTES="$RELEASE_BODY"
+else
+    RELEASE_NOTES="$RELEASE_BODY\n$COMMITS"
+fi
 
 # Create a new release with the combined notes
 gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
