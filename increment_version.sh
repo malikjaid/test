@@ -60,7 +60,7 @@ COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"%h %s" --no-merges | grep -
 if [[ -z "$COMMITS" ]]; then
     RELEASE_NOTES="$RELEASE_BODY"
 else
-    RELEASE_NOTES="$RELEASE_BODY\n$COMMITS"
+    RELEASE_NOTES="$RELEASE_BODY"$'\n\n'"$COMMITS"
 fi
 
 # Create a new release with the combined notes
