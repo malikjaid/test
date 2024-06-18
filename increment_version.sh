@@ -54,7 +54,7 @@ git push origin "$NEW_TAG"
 RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
 
 # Fetch the latest commit messages since the last tag, excluding version.php updates
-COMMITS=$(git log $LATEST_TAG..HEAD --oneline | grep -v "chore: Update version to")
+COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"%h %s" --no-merges | grep -v "chore: Update version to")
 
 # Combine the release notes and commit messages
 RELEASE_NOTES="$RELEASE_BODY\n\nCommits:\n$COMMITS"
