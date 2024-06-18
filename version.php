@@ -1,7 +1,7 @@
 <?php
 
 
-$version = '2.0.52';
+$version = '2.0.53';
 
 
 
