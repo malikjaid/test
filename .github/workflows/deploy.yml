@@ -5,8 +5,7 @@ on:
     workflows: ["Release"]
     types:
       - completed
-    branches:
-      - main
+   
 
 jobs:
   tests:
