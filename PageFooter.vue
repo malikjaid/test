@@ -62,5 +62,5 @@ export default {
 </style>
 
 <?php
-$version = '0.0.23';
+$version = '2.0.76';
 ?>
