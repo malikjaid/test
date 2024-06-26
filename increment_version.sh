@@ -22,13 +22,8 @@ MAJOR=${VERSION_PARTS[0]}
 MINOR=${VERSION_PARTS[1]}
 PATCH=${VERSION_PARTS[2]}
 
-# Increment the version number (customize this logic as needed)
-if [ "$MINOR" -ge "1" ]; then
-  PATCH=$((PATCH + 1))
-else
-  MINOR=$((MINOR + 1))
-  PATCH=0
-fi
+# Increment the patch version
+PATCH=$((PATCH + 1))
 
 # Construct the new version tag
 NEW_TAG="v$MAJOR.$MINOR.$PATCH"
@@ -41,11 +36,3 @@ git push origin $NEW_TAG
 
 # Create a new release
 gh release create $NEW_TAG
-
-    RELEASE_NOTES="$RELEASE_BODY"
-else
-    RELEASE_NOTES="$RELEASE_BODY"$'\n\n'"$COMMITS"
-fi
-
-# Create a new release with the combined notes
-gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
