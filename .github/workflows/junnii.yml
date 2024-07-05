@@ -1,32 +1,25 @@
-name: Releases
+name: "tagged-release"
+
 on:
   push:
-    branches:
-      - malik
-      - main
+    tags:
+      - "v*"
 
 jobs:
-  changelog:
-    runs-on: ubuntu-latest
+  tagged-release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      # ...
+      - name: "Build & test"
+        run: |
+          echo "done!"
 
-      - name: Generate Changelog
-        id: changelog
-        uses: TriPSs/conventional-changelog-action@v3.7.1
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          skip-version-file: true  # Skip version bumping as it's not needed
-          skip-on-empty: true  # Skip step if changelog is empty
-          
-      - name: Create Release
-        uses: actions/create-release@v1
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.changelog.outputs.tag }}
-          release_name: ${{ steps.changelog.outputs.tag }}
-          body: ${{ steps.changelog.outputs.clean_changelog }}
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            LICENSE.txt
+            *.jar
