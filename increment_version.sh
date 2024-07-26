@@ -36,32 +36,23 @@ else
     exit 1
 fi
 
+# Create a new branch for the version bump
+BRANCH_NAME="bump-version-$NEW_VERSION"
+git checkout -b "$BRANCH_NAME"
+
 # Commit the updated PHP file
 git add "$VERSION_FILE"
 git commit -m "chore: Update version to $NEW_VERSION in $VERSION_FILE"
 
-# Determine the current branch
-CURRENT_BRANCH=$(git branch --show-current)
+# Push the changes to the new branch
+git push origin "$BRANCH_NAME"
 
-# Push the changes to the current branch
-git push origin "$CURRENT_BRANCH"
+# Create a pull request using the GitHub CLI
+gh pr create --title "Release $NEW_TAG" --body "Bump version to $NEW_VERSION" --base malikt --head "$BRANCH_NAME"
 
-# Tag and create a new release
-git tag -a "$NEW_TAG" -m "$NEW_TAG"
-git push origin "$NEW_TAG"
+# Tag the new version (this will be done after the PR is merged)
+# git tag -a "$NEW_TAG" -m "$NEW_TAG"
+# git push origin "$NEW_TAG"
 
-# Create release notes
-RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
+# Note: Uncomment the above two lines after the PR is merged
 
-# Fetch the latest commit messages since the last tag, excluding version.php updates
-COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"%h %s" --no-merges | grep -v "chore: Update version to")
-
-# Combine the release notes and commit messages, ensuring proper formatting
-if [[ -z "$COMMITS" ]]; then
-    RELEASE_NOTES="$RELEASE_BODY"
-else
-    RELEASE_NOTES="$RELEASE_BODY"$'\n\n'"$COMMITS"
-fi
-
-# Create a new release with the combined notes
-gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
