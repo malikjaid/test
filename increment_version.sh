@@ -48,7 +48,17 @@ git commit -m "chore: Update version to $NEW_VERSION in $VERSION_FILE"
 git stash
 
 # Pull the latest changes from the remote branch to avoid conflicts
-git pull --rebase origin "$BRANCH_NAME"
+if ! git pull --rebase origin "$BRANCH_NAME"; then
+    echo "Rebase failed due to conflicts. Aborting rebase."
+    git rebase --abort
+
+    # Attempt to apply stashed changes back (if any), and notify user
+    git stash pop || true
+    echo "Manual conflict resolution required. Please resolve conflicts in the following files:"
+    git diff --name-only --diff-filter=U
+    echo "After resolving, commit the changes and continue the rebase manually."
+    exit 1
+fi
 
 # Apply the stashed changes, if any
 git stash pop || true
@@ -64,4 +74,3 @@ gh pr create --title "Release $NEW_TAG" --body "Bump version to $NEW_VERSION" --
 # git push origin "$NEW_TAG"
 
 # Note: Uncomment the above two lines after the PR is merged
-
