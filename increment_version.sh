@@ -44,11 +44,14 @@ git checkout -b "$BRANCH_NAME"
 git add "$VERSION_FILE"
 git commit -m "chore: Update version to $NEW_VERSION in $VERSION_FILE"
 
+# Pull the latest changes from the remote branch to avoid conflicts
+git pull --rebase origin "$BRANCH_NAME"
+
 # Push the changes to the new branch
 git push origin "$BRANCH_NAME"
 
 # Create a pull request using the GitHub CLI
-gh pr create --title "Release $NEW_TAG" --body "Bump version to $NEW_VERSION" --base <target-branch> --head "$BRANCH_NAME"
+gh pr create --title "Release $NEW_TAG" --body "Bump version to $NEW_VERSION" --base malikt --head "$BRANCH_NAME"
 
 # Tag the new version (this will be done after the PR is merged)
 # git tag -a "$NEW_TAG" -m "$NEW_TAG"
