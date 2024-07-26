@@ -44,6 +44,15 @@ git checkout -b "$BRANCH_NAME"
 git add "$VERSION_FILE"
 git commit -m "chore: Update version to $NEW_VERSION in $VERSION_FILE"
 
+# Stash any uncommitted changes
+git stash
+
+# Pull the latest changes from the remote branch to avoid conflicts
+git pull --rebase origin "$BRANCH_NAME"
+
+# Apply the stashed changes, if any
+git stash pop || true
+
 # Push the changes to the new branch
 git push origin "$BRANCH_NAME"
 
@@ -55,4 +64,3 @@ gh pr create --title "Release $NEW_TAG" --body "Bump version to $NEW_VERSION" --
 # git push origin "$NEW_TAG"
 
 # Note: Uncomment the above two lines after the PR is merged
-
