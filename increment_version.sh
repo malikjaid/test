@@ -23,7 +23,7 @@ NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 NEW_TAG="v$NEW_VERSION"
 
 # Update version.php with the new version
-VERSION_FILE="version.php"
+VERSION_FILE="app/Http/Controllers/VersionController.php"   
 
 # Check if version.php exists
 if [ -f "$VERSION_FILE" ]; then
@@ -36,41 +36,32 @@ else
     exit 1
 fi
 
-# Create a new branch for the version bump
-BRANCH_NAME="bump-version-$NEW_VERSION"
-git checkout -b "$BRANCH_NAME"
-
 # Commit the updated PHP file
 git add "$VERSION_FILE"
 git commit -m "chore: Update version to $NEW_VERSION in $VERSION_FILE"
 
-# Stash any uncommitted changes
-git stash
+# Determine the current branch
+CURRENT_BRANCH=$(git branch --show-current)
 
-# Pull the latest changes from the remote branch to avoid conflicts
-if ! git pull --rebase origin "$BRANCH_NAME"; then
-    echo "Rebase failed due to conflicts. Aborting rebase."
-    git rebase --abort
+# Push the changes to the current branch
+git push origin "$CURRENT_BRANCH"
 
-    # Attempt to apply stashed changes back (if any), and notify user
-    git stash pop || true
-    echo "Manual conflict resolution required. Please resolve conflicts in the following files:"
-    git diff --name-only --diff-filter=U
-    echo "After resolving, commit the changes and continue the rebase manually."
-    exit 1
+# Tag and create a new release
+git tag -a "$NEW_TAG" -m "$NEW_TAG"
+git push origin "$NEW_TAG"
+
+# Create release notes
+RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
+
+# Fetch the latest commit messages since the last tag, excluding version.php updates
+COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"%h %s" --no-merges | grep -v "chore: Update version to")
+
+# Combine the release notes and commit messages, ensuring proper formatting
+if [[ -z "$COMMITS" ]]; then
+    RELEASE_NOTES="$RELEASE_BODY"
+else
+    RELEASE_NOTES="$RELEASE_BODY"$'\n\n'"$COMMITS"
 fi
 
-# Apply the stashed changes, if any
-git stash pop || true
-
-# Push the changes to the new branch
-git push origin "$BRANCH_NAME"
-
-# Create a pull request using the GitHub CLI
-gh pr create --title "Release $NEW_TAG" --body "Bump version to $NEW_VERSION" --base malikt --head "$BRANCH_NAME"
-
-# Tag the new version (this will be done after the PR is merged)
-# git tag -a "$NEW_TAG" -m "$NEW_TAG"
-# git push origin "$NEW_TAG"
-
-# Note: Uncomment the above two lines after the PR is merged
+# Create a new release with the combined notes
+gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
