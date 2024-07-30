@@ -24,14 +24,21 @@ if [ -n "$INITIAL_VERSION" ]; then
     INITIAL_VERSION="" # Resetting for future runs
 else
     # Get the latest tag for the current branch
-    LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+    LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null)
 
-    # Extract the version numbers from the tag
-    IFS='.' read -r -a VERSION_PARTS <<< "${LATEST_TAG:1}"
+    if [ -z "$LATEST_TAG" ]; then
+        # Initialize version if no tags exist
+        MAJOR=0
+        MINOR=0
+        PATCH=0
+    else
+        # Extract the version numbers from the tag
+        IFS='.' read -r -a VERSION_PARTS <<< "${LATEST_TAG:1}"
 
-    MAJOR=${VERSION_PARTS[0]}
-    MINOR=${VERSION_PARTS[1]}
-    PATCH=${VERSION_PARTS[2]}
+        MAJOR=${VERSION_PARTS[0]}
+        MINOR=${VERSION_PARTS[1]}
+        PATCH=${VERSION_PARTS[2]}
+    fi
 
     # Increment the patch version
     PATCH=$((PATCH + 1))
