@@ -3,29 +3,36 @@
 # Fetch all tags from remote
 git fetch --tags
 
-# Get the latest tag (version)
-LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+# Check if an initial version is set via an environment variable or a specific file
+INITIAL_VERSION="2.0.0"
+VERSION_FILE="version.php"
 
-# Extract the version numbers from the tag
-IFS='.' read -r -a VERSION_PARTS <<< "${LATEST_TAG:1}"
+# Use the initial version if specified; otherwise, continue from the latest tag
+if [ -z "$INITIAL_VERSION" ]; then
+    # Get the latest tag (version)
+    LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
 
-MAJOR=${VERSION_PARTS[0]}
-MINOR=${VERSION_PARTS[1]}
-PATCH=${VERSION_PARTS[2]}
+    # Extract the version numbers from the tag
+    IFS='.' read -r -a VERSION_PARTS <<< "${LATEST_TAG:1}"
 
-# Increment the patch version
-PATCH=$((PATCH + 1))
+    MAJOR=${VERSION_PARTS[0]}
+    MINOR=${VERSION_PARTS[1]}
+    PATCH=${VERSION_PARTS[2]}
 
-# Form the new version string
-NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+    # Increment the patch version
+    PATCH=$((PATCH + 1))
+
+    # Form the new version string
+    NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+else
+    # Use the initial version specified
+    NEW_VERSION="$INITIAL_VERSION"
+fi
 
 # Create the new tag
 NEW_TAG="v$NEW_VERSION"
 
 # Update version.php with the new version
-VERSION_FILE="version.php"   
-
-# Check if version.php exists
 if [ -f "$VERSION_FILE" ]; then
     echo "$VERSION_FILE found."
     # Update the version in the PHP file
@@ -65,3 +72,4 @@ fi
 
 # Create a new release with the combined notes
 gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
+
