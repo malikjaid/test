@@ -77,13 +77,8 @@ if [ -f "$VERSION_FILE" ]; then
     echo "Before update:"
     cat "$VERSION_FILE"
 
-    # Update the version in the PHP file
-    sed -i "s/\(\$version\s*=\s*'\)[vV]*[0-9]\+\.[0-9]\+\.[0-9]\+\(';.*\)/\1$NEW_VERSION\2/" "$VERSION_FILE"
-
-    if [ $? -eq 0 ]; then
-        echo "Updated $VERSION_FILE with version: $NEW_VERSION"
-    else
-        echo "Error: Failed to update $VERSION_FILE!"
+    if ! sed -i -e "s/\(\$version\s*=\s*'\)[vV]*[0-9]\+\.[0-9]\+\.[0-9]\+\(';.*\)/\1$NEW_VERSION\2/" "$VERSION_FILE"; then
+        echo "Error: Failed to run sed command"
         exit 1
     fi
 
