@@ -10,11 +10,11 @@ CURRENT_BRANCH=$(git branch --show-current)
 case "$CURRENT_BRANCH" in
     "main")
         VERSION_FILE="version-main.php"
-        INITIAL_VERSION="2200.0.0"
+        INITIAL_VERSION="22022.0.0"
         ;;
     "malikt")
-        VERSION_FILE="version-dev.php"
-        INITIAL_VERSION="2300.1.0-beta"
+        VERSION_FILE="version-malikt.php"
+        INITIAL_VERSION="23032.1.0-beta"
         ;;
     *)
         VERSION_FILE="version-$CURRENT_BRANCH.php"
@@ -28,7 +28,7 @@ if [ -n "$INITIAL_VERSION" ]; then
     INITIAL_VERSION="" # Resetting for future runs
 else
     # Get the latest tag for the current branch
-    LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null)
+    LATEST_TAG=$(git tag --list "v*" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+" | grep "$CURRENT_BRANCH" | sort -V | tail -n1)
 
     if [ -z "$LATEST_TAG" ]; then
         # Initialize version if no tags exist
@@ -52,7 +52,7 @@ else
 fi
 
 # Form the new tag
-NEW_TAG="v$NEW_VERSION"
+NEW_TAG="v$NEW_VERSION-$CURRENT_BRANCH"
 
 # Debugging info
 echo "LATEST_TAG: $LATEST_TAG"
@@ -64,7 +64,7 @@ while git rev-parse "$NEW_TAG" >/dev/null 2>&1; do
     echo "Tag '$NEW_TAG' already exists. Incrementing version."
     PATCH=$((PATCH + 1))
     NEW_VERSION="$MAJOR.$MINOR.$PATCH"
-    NEW_TAG="v$NEW_VERSION"
+    NEW_TAG="v$NEW_VERSION-$CURRENT_BRANCH"
 
     # Debugging info
     echo "Updated NEW_VERSION: $NEW_VERSION"
@@ -102,7 +102,7 @@ git push origin "$NEW_TAG"
 RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
 
 # Fetch the latest commit messages since the last tag, excluding version file updates
-COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"%h %s" --no-merges | grep -v "chore: Update version to")
+COMMITS=$(git log "$LATEST_TAG"..HEAD --pretty=format:"%h %s" --no-merges | grep -v "chore: Update version to")
 
 # Combine the release notes and commit messages, ensuring proper formatting
 if [[ -z "$COMMITS" ]]; then
@@ -113,4 +113,3 @@ fi
 
 # Create a new release with the combined notes
 gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
-
