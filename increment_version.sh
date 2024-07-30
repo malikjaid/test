@@ -4,11 +4,15 @@
 git fetch --tags
 
 # Check if an initial version is set via an environment variable or a specific file
-INITIAL_VERSION="2.0.0"
+INITIAL_VERSION="" # Set this to "2.0.0" only for the first run
 VERSION_FILE="version.php"
 
 # Use the initial version if specified; otherwise, continue from the latest tag
-if [ -z "$INITIAL_VERSION" ]; then
+if [ -n "$INITIAL_VERSION" ]; then
+    NEW_VERSION="$INITIAL_VERSION"
+    # Reset INITIAL_VERSION after the first run
+    INITIAL_VERSION=""
+else
     # Get the latest tag (version)
     LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
 
@@ -24,13 +28,16 @@ if [ -z "$INITIAL_VERSION" ]; then
 
     # Form the new version string
     NEW_VERSION="$MAJOR.$MINOR.$PATCH"
-else
-    # Use the initial version specified
-    NEW_VERSION="$INITIAL_VERSION"
 fi
 
 # Create the new tag
 NEW_TAG="v$NEW_VERSION"
+
+# Check if the new tag already exists and handle the error
+if git rev-parse "$NEW_TAG" >/dev/null 2>&1; then
+    echo "Error: Tag '$NEW_TAG' already exists."
+    exit 1
+fi
 
 # Update version.php with the new version
 if [ -f "$VERSION_FILE" ]; then
