@@ -6,10 +6,10 @@ git fetch --tags
 # Determine the current branch
 CURRENT_BRANCH=$(git branch --show-current)
 
-# Set initial version based on branch
+# Set version file and initial version based on the branch
 if [ "$CURRENT_BRANCH" == "main" ]; then
     VERSION_FILE="version-main.php"
-    INITIAL_VERSION="222.0.0"
+    INITIAL_VERSION="220.0.0"
 elif [ "$CURRENT_BRANCH" == "malikt" ]; then
     VERSION_FILE="version-dev.php"
     INITIAL_VERSION="230.1.0-beta"
@@ -43,12 +43,21 @@ fi
 # Form the new tag
 NEW_TAG="v$NEW_VERSION"
 
+# Debugging info
+echo "LATEST_TAG: $LATEST_TAG"
+echo "NEW_VERSION: $NEW_VERSION"
+echo "NEW_TAG: $NEW_TAG"
+
 # Check if the new tag already exists and increment if necessary
 while git rev-parse "$NEW_TAG" >/dev/null 2>&1; do
     echo "Tag '$NEW_TAG' already exists. Incrementing version."
     PATCH=$((PATCH + 1))
     NEW_VERSION="$MAJOR.$MINOR.$PATCH"
     NEW_TAG="v$NEW_VERSION"
+
+    # Debugging info
+    echo "Updated NEW_VERSION: $NEW_VERSION"
+    echo "Updated NEW_TAG: $NEW_TAG"
 done
 
 # Update the version file with the new version
@@ -88,4 +97,5 @@ fi
 
 # Create a new release with the combined notes
 gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
+
 
