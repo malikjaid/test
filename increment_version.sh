@@ -18,11 +18,10 @@ else
     INITIAL_VERSION="1223.0.0-$CURRENT_BRANCH"
 fi
 
-# Check if an initial version is set via an environment variable or a specific file
+# If an initial version is set, use it and reset the variable
 if [ -n "$INITIAL_VERSION" ]; then
     NEW_VERSION="$INITIAL_VERSION"
-    # Reset INITIAL_VERSION after the first run
-    INITIAL_VERSION=""
+    INITIAL_VERSION="" # Resetting for future runs
 else
     # Get the latest tag for the current branch
     LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
@@ -89,3 +88,4 @@ fi
 
 # Create a new release with the combined notes
 gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
+
