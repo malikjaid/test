@@ -7,16 +7,20 @@ git fetch --tags
 CURRENT_BRANCH=$(git branch --show-current)
 
 # Set version file and initial version based on the branch
-if [ "$CURRENT_BRANCH" == "main" ]; then
-    VERSION_FILE="version-main.php"
-    INITIAL_VERSION=""
-elif [ "$CURRENT_BRANCH" == "malikt" ]; then
-    VERSION_FILE="version-dev.php"
-    INITIAL_VERSION=""
-else
-    VERSION_FILE="version-$CURRENT_BRANCH.php"
-    INITIAL_VERSION="1223.0.0-$CURRENT_BRANCH"
-fi
+case "$CURRENT_BRANCH" in
+    "main")
+        VERSION_FILE="version-main.php"
+        INITIAL_VERSION="2200.0.0"
+        ;;
+    "malikt")
+        VERSION_FILE="version-dev.php"
+        INITIAL_VERSION="2300.1.0-beta"
+        ;;
+    *)
+        VERSION_FILE="version-$CURRENT_BRANCH.php"
+        INITIAL_VERSION="1223.0.0-$CURRENT_BRANCH"
+        ;;
+esac
 
 # If an initial version is set, use it and reset the variable
 if [ -n "$INITIAL_VERSION" ]; then
@@ -72,7 +76,12 @@ if [ -f "$VERSION_FILE" ]; then
     echo "$VERSION_FILE found."
     # Update the version in the PHP file
     sed -i "s/\(\$version\s*=\s*'\)[vV]*[0-9]\+\.[0-9]\+\.[0-9]\+\(';.*\)/\1$NEW_VERSION\2/" "$VERSION_FILE"
-    echo "Updated $VERSION_FILE with version: $NEW_VERSION"
+    if [ $? -eq 0 ]; then
+        echo "Updated $VERSION_FILE with version: $NEW_VERSION"
+    else
+        echo "Error: Failed to update $VERSION_FILE!"
+        exit 1
+    fi
 else
     echo "Error: $VERSION_FILE not found!"
     exit 1
