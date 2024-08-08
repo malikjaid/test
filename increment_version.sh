@@ -74,34 +74,34 @@ done
 # Update the version file with the new version
 if [ -f "$VERSION_FILE" ]; then
     echo "$VERSION_FILE found."
-    echo "Before update:"
-    cat "$VERSION_FILE"
-
-    if ! sed -i -e "s/\(\$version\s*=\s*'\)[vV]*[0-9]\+\.[0-9]\+\.[0-9]\+\(';.*\)/\1$NEW_VERSION\2/" "$VERSION_FILE"; then
-        echo "Error: Failed to run sed command"
+    # Update the version in the PHP file
+    sed -i "s/\(\$version\s*=\s*'\)[vV]*[0-9]\+\.[0-9]\+\.[0-9]\+\(';.*\)/\1$NEW_VERSION\2/" "$VERSION_FILE"
+    if [ $? -eq 0 ]; then
+        echo "Updated $VERSION_FILE with version: $NEW_VERSION"
+    else
+        echo "Error: Failed to update $VERSION_FILE!"
         exit 1
     fi
-
-    echo "After update:"
-    cat "$VERSION_FILE"
 else
     echo "Error: $VERSION_FILE not found!"
     exit 1
 fi
 
-# Commit the updated version file
-git add "$VERSION_FILE"
-git commit -m "chore: Update version to $NEW_VERSION in $VERSION_FILE"
-
-# Push the changes to the current branch
-git push origin "$CURRENT_BRANCH"
+# Check for changes and commit them
+if git diff --quiet; then
+    echo "No changes to commit."
+else
+    git add "$VERSION_FILE"
+    git commit -m "chore: Update version to $NEW_VERSION in $VERSION_FILE"
+    git push origin "$CURRENT_BRANCH"
+fi
 
 # Tag and create a new release
 git tag -a "$NEW_TAG" -m "$NEW_TAG"
 git push origin "$NEW_TAG"
 
 # Create release notes
-RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
+RELEASE_BODY=$(npx conventional-changelog-cli -p angular -i CHANGELOG.md -s -r 0)
 
 # Fetch the latest commit messages since the last tag, excluding version file updates
 COMMITS=$(git log "$LATEST_TAG"..HEAD --pretty=format:"%h %s" --no-merges | grep -v "chore: Update version to")
@@ -115,6 +115,3 @@ fi
 
 # Create a new release with the combined notes
 gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
-
-
-
