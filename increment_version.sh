@@ -75,13 +75,16 @@ done
 if [ -f "$VERSION_FILE" ]; then
     echo "$VERSION_FILE found."
     # Update the version in the PHP file
-    sed -i "s/\(\$version\s*=\s*'\)[vV]*[0-9]\+\.[0-9]\+\.[0-9]\+\(';.*\)/\1$NEW_VERSION\2/" "$VERSION_FILE"
+    sed -i "s/\(\$version\s*=\s*'\)[^']*';/\1$NEW_VERSION';/" "$VERSION_FILE"
     if [ $? -eq 0 ]; then
         echo "Updated $VERSION_FILE with version: $NEW_VERSION"
     else
         echo "Error: Failed to update $VERSION_FILE!"
         exit 1
     fi
+
+    # Debugging info: Check for changes
+    git diff "$VERSION_FILE"
 else
     echo "Error: $VERSION_FILE not found!"
     exit 1
@@ -101,7 +104,7 @@ git tag -a "$NEW_TAG" -m "$NEW_TAG"
 git push origin "$NEW_TAG"
 
 # Create release notes
-RELEASE_BODY=$(conventional-changelog -p angular -i CHANGELOG.md -s -r 0)
+RELEASE_BODY=$(npx conventional-changelog-cli -p angular -i CHANGELOG.md -s -r 0)
 
 # Fetch the latest commit messages since the last tag, excluding version file updates
 COMMITS=$(git log "$LATEST_TAG"..HEAD --pretty=format:"%h %s" --no-merges | grep -v "chore: Update version to")
@@ -115,4 +118,3 @@ fi
 
 # Create a new release with the combined notes
 gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
-
