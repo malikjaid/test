@@ -87,12 +87,14 @@ else
     exit 1
 fi
 
-# Commit the updated version file
-git add "$VERSION_FILE"
-git commit -m "chore: Update version to $NEW_VERSION in $VERSION_FILE"
-
-# Push the changes to the current branch
-git push origin "$CURRENT_BRANCH"
+# Check for changes and commit them
+if git diff --quiet; then
+    echo "No changes to commit."
+else
+    git add "$VERSION_FILE"
+    git commit -m "chore: Update version to $NEW_VERSION in $VERSION_FILE"
+    git push origin "$CURRENT_BRANCH"
+fi
 
 # Tag and create a new release
 git tag -a "$NEW_TAG" -m "$NEW_TAG"
@@ -113,3 +115,4 @@ fi
 
 # Create a new release with the combined notes
 gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
+
