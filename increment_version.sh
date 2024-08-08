@@ -10,7 +10,7 @@ CURRENT_BRANCH=$(git branch --show-current)
 case "$CURRENT_BRANCH" in
     "main")
         VERSION_FILE="version-main.php"
-        INITIAL_VERSION=""
+        INITIAL_VERSION="455.7648.0.0"
         ;;
     "malikt")
         VERSION_FILE="version-malikt.php"
@@ -25,7 +25,7 @@ esac
 # If an initial version is set, use it and reset the variable
 if [ -n "$INITIAL_VERSION" ]; then
     NEW_VERSION="$INITIAL_VERSION"
-    INITIAL_VERSION="555.0.0.0" # Resetting for future runs
+    INITIAL_VERSION="" # Resetting for future runs
 else
     # Get the latest tag for the current branch
     LATEST_TAG=$(git tag --list "v*" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+" | grep "$CURRENT_BRANCH" | sort -V | tail -n1)
