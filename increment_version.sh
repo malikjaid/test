@@ -75,7 +75,7 @@ done
 if [ -f "$VERSION_FILE" ]; then
     echo "$VERSION_FILE found."
     # Update the version in the PHP file
-    sed -i "s/\(\$version\s*=\s*'\)[vV]*[0-9]\+\.[0-9]\+\.[0-9]\+\(';.*\)/\1$NEW_VERSION\2/" "$VERSION_FILE"
+    sed -i "s/\(\$version\s*=\s*'\)[^']*';/\1$NEW_VERSION';/" "$VERSION_FILE"
     if [ $? -eq 0 ]; then
         echo "Updated $VERSION_FILE with version: $NEW_VERSION"
     else
