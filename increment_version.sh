@@ -82,6 +82,9 @@ if [ -f "$VERSION_FILE" ]; then
         echo "Error: Failed to update $VERSION_FILE!"
         exit 1
     fi
+
+    # Debugging info: Check for changes
+    git diff "$VERSION_FILE"
 else
     echo "Error: $VERSION_FILE not found!"
     exit 1
