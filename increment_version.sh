@@ -18,7 +18,7 @@ case "$CURRENT_BRANCH" in
         ;;
     *)
         VERSION_FILE="version-$CURRENT_BRANCH.php"
-        INITIAL_VERSION="1223.0.0-$CURRENT_BRANCH"
+        INITIAL_VERSION="4444.0.0-$CURRENT_BRANCH"
         ;;
 esac
 
