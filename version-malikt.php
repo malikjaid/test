@@ -1,7 +1,7 @@
 <?php
 
 
-$version = '1000.0.1';
+$version = '..1';
 
 
 
