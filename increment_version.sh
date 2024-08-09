@@ -10,11 +10,11 @@ CURRENT_BRANCH=$(git branch --show-current)
 case "$CURRENT_BRANCH" in
     "main")
         VERSION_FILE="version-main.php"
-        INITIAL_VERSION="11111.0.1"
+        INITIAL_VERSION="9999.0.1"
         ;;
     "malikt")
         VERSION_FILE="version-malikt.php"
-        INITIAL_VERSION=""
+        INITIAL_VERSION="8888.0.0"
         ;;
     *)
         VERSION_FILE="version-$CURRENT_BRANCH.php"
@@ -22,41 +22,17 @@ case "$CURRENT_BRANCH" in
         ;;
 esac
 
-# If an initial version is set, use it and reset the variable
-if [ -n "$INITIAL_VERSION" ]; then
-    # Check if there are any tags that match the new initial version format
-    LATEST_TAG=$(git tag --list "v$INITIAL_VERSION" | grep "$CURRENT_BRANCH" | sort -V | tail -n1)
+# Get the latest tag for the current branch
+LATEST_TAG=$(git tag --list "v$INITIAL_VERSION" | grep "$CURRENT_BRANCH" | sort -V | tail -n1)
 
-    if [ -z "$LATEST_TAG" ]; then
-        # Use the initial version if no matching tags exist
-        NEW_VERSION="$INITIAL_VERSION"
-    else
-        # Extract the version numbers from the tag
-        IFS='.' read -r -a VERSION_PARTS <<< "${LATEST_TAG:1}"
-
-        MAJOR=${VERSION_PARTS[0]}
-        MINOR=${VERSION_PARTS[1]}
-        PATCH=${VERSION_PARTS[2]}
-
-        # Increment the patch version
-        PATCH=$((PATCH + 1))
-
-        # Form the new version string
-        NEW_VERSION="$MAJOR.$MINOR.$PATCH"
-    fi
+# Check if the latest tag is empty, and set the version to INITIAL_VERSION if so
+if [ -z "$LATEST_TAG" ]; then
+    NEW_VERSION="$INITIAL_VERSION"
 else
-    # Get the latest tag for the current branch
-    LATEST_TAG=$(git tag --list "v*" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+" | grep "$CURRENT_BRANCH" | sort -V | tail -n1)
+    # Extract the version numbers from the tag
+    IFS='.' read -r -a VERSION_PARTS <<< "${LATEST_TAG//[!0-9.]/}"
 
-    if [ -z "$LATEST_TAG" ]; then
-        # Initialize version if no tags exist
-        MAJOR=0
-        MINOR=0
-        PATCH=0
-    else
-        # Extract the version numbers from the tag
-        IFS='.' read -r -a VERSION_PARTS <<< "${LATEST_TAG:1}"
-
+    if [ ${#VERSION_PARTS[@]} -eq 3 ]; then
         MAJOR=${VERSION_PARTS[0]}
         MINOR=${VERSION_PARTS[1]}
         PATCH=${VERSION_PARTS[2]}
@@ -66,6 +42,9 @@ else
 
         # Form the new version string
         NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+    else
+        echo "Error: Failed to parse version from $LATEST_TAG"
+        exit 1
     fi
 fi
 
