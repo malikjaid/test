@@ -14,18 +14,36 @@ case "$CURRENT_BRANCH" in
         ;;
     "malikt")
         VERSION_FILE="version-malikt.php"
-        INITIAL_VERSION=""
+        INITIAL_VERSION="1212.0.0"
         ;;
     *)
         VERSION_FILE="version-$CURRENT_BRANCH.php"
-        INITIAL_VERSION=""
+        INITIAL_VERSION="1223.0.0-$CURRENT_BRANCH"
         ;;
 esac
 
 # If an initial version is set, use it and reset the variable
 if [ -n "$INITIAL_VERSION" ]; then
-    NEW_VERSION="$INITIAL_VERSION"
-    INITIAL_VERSION="" # Resetting for future runs
+    # Check if there are any tags that match the new initial version format
+    LATEST_TAG=$(git tag --list "v$INITIAL_VERSION" | grep "$CURRENT_BRANCH" | sort -V | tail -n1)
+
+    if [ -z "$LATEST_TAG" ]; then
+        # Use the initial version if no matching tags exist
+        NEW_VERSION="$INITIAL_VERSION"
+    else
+        # Extract the version numbers from the tag
+        IFS='.' read -r -a VERSION_PARTS <<< "${LATEST_TAG:1}"
+
+        MAJOR=${VERSION_PARTS[0]}
+        MINOR=${VERSION_PARTS[1]}
+        PATCH=${VERSION_PARTS[2]}
+
+        # Increment the patch version
+        PATCH=$((PATCH + 1))
+
+        # Form the new version string
+        NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+    fi
 else
     # Get the latest tag for the current branch
     LATEST_TAG=$(git tag --list "v*" | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+" | grep "$CURRENT_BRANCH" | sort -V | tail -n1)
@@ -42,13 +60,13 @@ else
         MAJOR=${VERSION_PARTS[0]}
         MINOR=${VERSION_PARTS[1]}
         PATCH=${VERSION_PARTS[2]}
+
+        # Increment the patch version
+        PATCH=$((PATCH + 1))
+
+        # Form the new version string
+        NEW_VERSION="$MAJOR.$MINOR.$PATCH"
     fi
-
-    # Increment the patch version
-    PATCH=$((PATCH + 1))
-
-    # Form the new version string
-    NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 fi
 
 # Form the new tag
@@ -118,3 +136,4 @@ fi
 
 # Create a new release with the combined notes
 gh release create "$NEW_TAG" --notes "$RELEASE_NOTES"
+
