@@ -14,7 +14,7 @@ case "$CURRENT_BRANCH" in
         ;;
     "malikt")
         VERSION_FILE="version-malikt.php"
-        INITIAL_VERSION="1212122.0.0"
+        INITIAL_VERSION=""
         ;;
     *)
         VERSION_FILE="version-$CURRENT_BRANCH.php"
